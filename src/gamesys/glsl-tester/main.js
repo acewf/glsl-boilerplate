@@ -1,4 +1,4 @@
-var _program = require("./balls-step3/programes/p-ball");
+var _program = require("./lesson-4/programes/p-ball");
 var utils = require("./utils/utils");
 var glContext       = require('gl-context');
 var glClear    = require('gl-clear');
