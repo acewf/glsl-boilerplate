@@ -1,6 +1,6 @@
 <snippet>
-  <content><![CDATA[
-# ${1:Glsl BoilerPlate}
+  <content>
+# Glsl BoilerPlate
 
 This project starts from the basics how to develop for WebGl.
 1. You can find clear separation between vertex shader files and fragments shader files.
@@ -39,6 +39,5 @@ part of trying to push the technology use for building games on Gamesys
 <a rel="license" href="http://opensource.org/licenses/MIT">
 <img alt="MIT license" height="40" src="http://upload.wikimedia.org/wikipedia/commons/c/c3/License_icon-mit.svg" /></a>
 
-]]></content>
-  <tabTrigger>readme</tabTrigger>
+  </content>
 </snippet>
