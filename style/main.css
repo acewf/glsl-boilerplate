@@ -1,0 +1,10 @@
+body, html {
+  font-family: "Arial";
+}
+a {
+  color: #000;
+}
+#wrapper {
+  margin: 0 auto;
+  width: 640px;
+}
