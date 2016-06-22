@@ -2,9 +2,10 @@
   <content>
 # Glsl BoilerPlate
 
-This project starts from the basics how to develop for WebGl.
-1. You can find clear separation between vertex shader files and fragments shader files.
-2. This project was structure for creating multiple examples/exercises that are not related or depend from each other.
+This project starts from the basics how to develop for WebGl
+
+1. You can find clear separation between vertex shader files and fragments shader files
+2. This project was structure for creating multiple examples/exercises that are not related or depend from each other
 
 ## Browsers
 | <img src="https://raw.githubusercontent.com/alrra/browser-logos/master/safari/safari_32x32.png" alt="Safari"> | <img src="https://raw.githubusercontent.com/alrra/browser-logos/master/chrome/chrome_32x32.png" alt="Chrome"> | <img src="https://raw.githubusercontent.com/alrra/browser-logos/master/firefox/firefox_32x32.png" alt="Firefox"> |
