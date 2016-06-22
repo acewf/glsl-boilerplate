@@ -14,7 +14,6 @@ module.exports = function(viewSize){
   var _ball;
   return {
     gl:null,
-    shader:null,
     init:function (gl,gameProperties) {
         this.gl = gl;
         _ball = new Ball(this.gl);

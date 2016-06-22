@@ -5,6 +5,7 @@ attribute vec3 aColor;
 
 uniform mat4 uModelView;
 uniform mat4 uProjection;
+uniform mat4 view;
 
 uniform vec2 resolution;
 varying vec2 vResolution;
@@ -19,5 +20,5 @@ void main() {
   vColor = aColor;
   vTime = time;
 
-  gl_Position = uProjection * uModelView * vec4(aPosition, 1.0);
+  gl_Position = uProjection * view * uModelView * vec4(aPosition, 1.0);
 }

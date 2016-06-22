@@ -1,4 +1,5 @@
 var glBuffer = require('gl-buffer');
+var mat4     = require('gl-mat4');
 var _frag = require("raw!./../shaders/ball.frag");
 var _vertex = require("raw!./../shaders/ball.vs");
 var glShader = require('gl-shader');
@@ -8,7 +9,8 @@ function random(max,min){
   var final = min+value;
   return final;
 }
-var blue = {r:random(.9,0),g:random(0.9,0),b:random(0.9,0)};
+//var blue = {r:random(.9,0),g:random(0.9,0),b:random(0.9,0)};
+var blue = {r:0,g:0,b:1};
 
 function Shape (gl,z) {
   var circle = 2*Math.PI;
@@ -20,6 +22,7 @@ function Shape (gl,z) {
   var bcolor = false;
   var color = white;
   var zHigh = 0.1;
+  var model = mat4.create()
   ball.vertices.push(position.x,position.y,z+zHigh+1);
   ball.color.push(color.r, color.g, color.b);
   for(var i=0;i<circlePoints;i++){
@@ -52,14 +55,26 @@ function Shape (gl,z) {
   _shader.attributes.aPosition.location = 0;
   _shader.attributes.aColor.location = 1;
   _shader.uniforms.time = 0.9337512581542471;
+  var _rotation = 0;
+  var _xRotation = z/5;
+  var _zIndex=-10;
+  var _initialZ = -20;
+  var _z = _initialZ+_zIndex;
 
   return {
-    render:function(projectionMatrix,tMatrix,lastTime,_nVect){
+    render:function(camera,time,_nVect){
+      _rotation += (360 * time.elapsed) / 500000;
+      _z = _initialZ+_zIndex*Math.cos(_rotation);
+      mat4.identity(model, model);
+      mat4.translate(model, model, [0, 0, _z]);
+      mat4.rotate(model, model, _rotation, [0, 1, 0]);
+
       _shader.bind();
-      _shader.uniforms.uProjection = projectionMatrix;
-      _shader.uniforms.uModelView = tMatrix;
+      _shader.uniforms.uProjection = camera.projection;
+      _shader.uniforms.uModelView = model;
+      _shader.uniforms.view = camera.view
       _shader.uniforms.resolution = _nVect;
-      _shader.uniforms.time = parseFloat(Math.cos(lastTime/1000));
+      _shader.uniforms.time = 0;
       _vertices.bind();
       _shader.attributes.aPosition.pointer();
       _colors.bind();

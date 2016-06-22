@@ -1,6 +1,7 @@
 var Ball = require("./ball");
 var mat4     = require('gl-mat4');
 var vec2 = require('gl-vec2');
+var createCamera = require('perspective-camera');
 var _nVect = null;
 
 var utils = {
@@ -9,11 +10,13 @@ var utils = {
   }
 };
 module.exports = function(viewSize){
-  var ballMatrix   = mat4.create();
-  var projectionMatrix   = mat4.create();
-  var _ball;
   var _zPos = [-2,-3.5,-5];
   var _balls = [];
+  var camera = createCamera({
+    fov: Math.PI / 4,
+    near: 0.01,
+    far: 100
+  });
   return {
     init:function (gl,gameProperties) {
         this.gl = gl;
@@ -21,21 +24,18 @@ module.exports = function(viewSize){
           _balls[i] = new Ball(gl,_zPos[i]);
         }
         _nVect = vec2.create();
-        vec2.set(_nVect,0.1,0.5);
+        vec2.set(_nVect,0,0);
     },
-    currTime:utils.now(),
-    lastTime:utils.now(),
-    rTri:0,
-    elapsed:0,
-    zIndex:-10,
-    z:-5,
-    x:0,
+    time:{
+      currTime:utils.now(),
+      lastTime:utils.now(),
+      rTri:0,
+      elapsed:0
+    },
     update:function(){
-      this.currTime = utils.now();
-      this.elapsed  = this.currTime - this.lastTime;
-      this.lastTime = this.currTime;
-      this.rTri += (360 * this.elapsed) / 500000;
-      this.z = -20+this.zIndex*Math.cos(this.rTri);
+      this.time.currTime = utils.now();
+      this.time.elapsed  = this.time.currTime - this.time.lastTime;
+      this.time.lastTime = this.time.currTime;
     },
     render:function(width, height,shader){
       var scope = this;
@@ -43,12 +43,13 @@ module.exports = function(viewSize){
       scope.gl.enable(scope.gl.DEPTH_TEST);
       scope.gl.clear(scope.gl.COLOR_BUFFER_BIT | scope.gl.DEPTH_BUFFER_BIT);
       //scope.gl.enable(scope.gl.CULL_FACE);
-      mat4.perspective(projectionMatrix, Math.PI / 4, width / height, 0.1, 100);
-      mat4.identity(ballMatrix, ballMatrix);
-      mat4.translate(ballMatrix, ballMatrix, [0, 0, this.z]);
-      mat4.rotate(ballMatrix, ballMatrix, this.rTri, [0, 1, .1]);
+      camera.identity();
+      //camera.translate([ x, 0, z ])
+      camera.lookAt([ 0, 0, 0 ]);
+      camera.viewport = [ 0, 0, width, height ];
+      camera.update();
       for (var i = 0; i < _balls.length; i++) {
-        _balls[i].render(projectionMatrix,ballMatrix,this.lastTime,_nVect);
+        _balls[i].render(camera,this.time,_nVect);
       }
     }
   };
