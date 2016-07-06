@@ -7,5 +7,10 @@ module.exports = {
       var elem = context.document.createElement(tag);
       parent.appendChild(elem);
       return elem;
+    },
+    random:function random(max,min){
+      var value = Math.random()*(max-min);
+      var final = min+value;
+      return final;
     }
 }

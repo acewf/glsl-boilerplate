@@ -1,21 +1,27 @@
 var glBuffer = require('gl-buffer');
 var mat4     = require('gl-mat4');
+var vec2 = require('gl-vec2');
 var _frag = require("raw!./../shaders/ball.frag");
 var _vertex = require("raw!./../shaders/ball.vs");
 var glShader = require('gl-shader');
+var utils = require("./../../utils/utils");
 var white = {r:1.0,g:1.0,b:1.0};
-function random(max,min){
-  var value = Math.random()*(max-min);
-  var final = min+value;
-  return final;
-}
-//var blue = {r:random(.9,0),g:random(0.9,0),b:random(0.9,0)};
-var blue = {r:0,g:0,b:1};
+var index = 0;
+var colorArr = [{r:1.0,g:0.0,b:0.0}];
+colorArr.push({r:0.0,g:1.0,b:0.0});
+colorArr.push({r:0.0,g:0.0,b:1.0});
 
-function Shape (gl,z) {
+function Shape (gl,z,viewSize) {
+  var _color = colorArr[index];
+  var _fragResolution = vec2.create();
+  var _viewResolution = vec2.create();
+  vec2.set(_viewResolution,viewSize.width,viewSize.height);
+  vec2.set(_fragResolution,1,1);
+  index+=1
+  var xRand = 0;//-2+6*Math.random();
+  var yRand = 4+z;
   var circle = 2*Math.PI;
-  var radius = 10;
-  var circlePoints = 20;
+  var circlePoints = 10;
   var angle = circle/circlePoints;
   var position = {x:0.0,y:0.0,z:z+0.0,angle:0.0};
   var ball = {vertices:[],color:[]};
@@ -23,11 +29,11 @@ function Shape (gl,z) {
   var color = white;
   var zHigh = 0.1;
   var model = mat4.create()
-  ball.vertices.push(position.x,position.y,z+zHigh+1);
+  ball.vertices.push(xRand+position.x,yRand+position.y,z+zHigh+1);
   ball.color.push(color.r, color.g, color.b);
   for(var i=0;i<circlePoints;i++){
-    position.x = Math.cos(position.angle);
-    position.y = Math.sin(position.angle);
+    position.x = xRand+Math.cos(position.angle);
+    position.y = yRand+Math.sin(position.angle);
     ball.vertices.push(position.x,position.y,position.z);
     if(bcolor){
       color = white;
@@ -35,18 +41,22 @@ function Shape (gl,z) {
       position.z = z+zHigh;
     } else {
       position.z = z+0.0;
-      color = blue;
+      color = _color;
       bcolor = true;
     }
     ball.color.push(color.r, color.g, color.b);
     position.angle += angle;
   }
-  position.x = Math.cos(0.0);
+  position.x = xRand+Math.cos(0.0);
   position.y = Math.sin(0.0);
   /// CLOSE FIGURE
-  ball.vertices.push(position.x,position.y,z+0.0);
-  ball.color.push(blue.r, blue.g, blue.b);
+  ball.vertices.push(position.x,yRand+position.y,z+0.0);
+  ball.color.push(_color.r, _color.g, _color.b);
 
+
+  //glBuffer(gl,data,type,usage);
+  //type = gl.ARRAY_BUFFER || ELEMENT_ARRAY_BUFFER
+  //usage = gl.DYNAMIC_DRAW || gl.STREAM_DRAW || gl.STATIC_DRAW
   var _vertices = glBuffer(gl,new Float32Array(ball.vertices));
   var _colors = glBuffer(gl,new Float32Array(ball.color));
   var _length = ball.vertices.length/3;
@@ -54,27 +64,31 @@ function Shape (gl,z) {
 
   _shader.attributes.aPosition.location = 0;
   _shader.attributes.aColor.location = 1;
-  _shader.uniforms.time = 0.9337512581542471;
-  var _rotation = 0;
+  var _rotation = 180;
   var _xRotation = z/5;
-  var _zIndex=-10;
-  var _initialZ = -20;
+  var _zIndex=-5;
+  var _initialZ = 0;
   var _z = _initialZ+_zIndex;
 
+  mat4.rotate(model, model, _rotation, [0, 0, 0]);
+
   return {
-    render:function(camera,time,_nVect){
-      _rotation += (360 * time.elapsed) / 500000;
+    render:function(camera,time){
+      _rotation += (360 * time.elapsed) * 0.000001;
       _z = _initialZ+_zIndex*Math.cos(_rotation);
       mat4.identity(model, model);
-      mat4.translate(model, model, [0, 0, _z]);
-      mat4.rotate(model, model, _rotation, [0, 1, 0]);
+      mat4.translate(model, model, [_z, 0, -7]);
+      //mat4.translate(model, model, [0, 0, 0]);
+      //mat4.rotate(model, model, _rotation, [0, 1, 0]);
 
       _shader.bind();
       _shader.uniforms.uProjection = camera.projection;
       _shader.uniforms.uModelView = model;
       _shader.uniforms.view = camera.view
-      _shader.uniforms.resolution = _nVect;
-      _shader.uniforms.time = parseFloat(Math.cos(time.lastTime/1000));
+      _shader.uniforms.resolution = _viewResolution;
+      _shader.uniforms.fResolution = _fragResolution;
+      var _time = time.lastTime-time.initTime;
+      _shader.uniforms.time = parseFloat(_time);
       _vertices.bind();
       _shader.attributes.aPosition.pointer();
       _colors.bind();
