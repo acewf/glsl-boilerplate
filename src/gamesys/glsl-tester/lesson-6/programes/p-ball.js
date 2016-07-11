@@ -13,7 +13,7 @@ var utils = {
 };
 module.exports = function(viewSize){
   var _gui;
-  //_gui = new dat.GUI();
+  _gui = new dat.GUI();
   var _zPos = [-2,-3.5,-5];
   var _balls = [];
   var camera = createCamera({
@@ -21,9 +21,9 @@ module.exports = function(viewSize){
     near: 0.01,
     far: 100
   });
-  //var simulatorGui = _gui.addFolder('Simulator');
-  //simulatorGui.add(settings, 'cameraDistance', 0, 10).listen();
-  //simulatorGui.add(settings, 'timeScale', 1, 10).listen();
+  var simulatorGui = _gui.addFolder('Simulator');
+  simulatorGui.add(settings, 'cameraDistance', 0, 10).listen();
+  simulatorGui.add(settings, 'timeScale', 1, 10).listen();
   return {
     init:function (gl,gameProperties) {
         this.gl = gl;
@@ -57,7 +57,7 @@ module.exports = function(viewSize){
       camera.viewport = [ 0, 0, width, height ];
       camera.update();
       for (var i = 0; i < _balls.length; i++) {
-        _balls[i].render(camera,this.time);
+        _balls[i].render(camera,this.time,settings);
       }
     }
   };

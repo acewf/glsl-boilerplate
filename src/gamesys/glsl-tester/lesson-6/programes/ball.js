@@ -79,8 +79,8 @@ function Shape (gl,z,viewSize) {
   var renderOnce = false;
 
   return {
-    render:function(camera,time){
-      _rotation += (360 * time.elapsed) * 0.000001;
+    render:function(camera,time,settings){
+      _rotation += (360 * time.elapsed) * (settings.timeScale*0.000001);
       _z = _initialZ+_zIndex*Math.cos(_rotation);
       mat4.identity(model, model);
       mat4.translate(model, model, [_z, 0, -7]);
