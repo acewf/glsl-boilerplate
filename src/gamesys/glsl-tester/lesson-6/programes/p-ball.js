@@ -14,7 +14,7 @@ var utils = {
 module.exports = function(viewSize){
   var _gui;
   _gui = new dat.GUI();
-  var _zPos = [-2,-3.5,-5];
+  var _zPos = [-2,-3.5,-1];
   var _balls = [];
   var camera = createCamera({
     fov: Math.PI / 4,

@@ -1,4 +1,5 @@
 var glBuffer = require('gl-buffer');
+var createTexture = require('gl-texture2d');
 var mat4     = require('gl-mat4');
 var vec2 = require('gl-vec2');
 var _frag = [];
@@ -6,7 +7,10 @@ _frag[0] = require("raw!./../shaders/ball.frag");
 _frag[1] = require("raw!./../shaders/ball2.frag");
 _frag[2] = require("raw!./../shaders/ball3.frag");
 
-var _vertex = require("raw!./../shaders/ball.vs");
+var _vertex = [];
+_vertex[0] = require("raw!./../shaders/ball.vs");
+_vertex[1] = require("raw!./../shaders/ball.vs");
+_vertex[2] = require("raw!./../shaders/ball3.vs");
 var glShader = require('gl-shader');
 var utils = require("./../../utils/utils");
 var white = {r:1.0,g:1.0,b:1.0};
@@ -14,6 +18,7 @@ var index = 0;
 var colorArr = [{r:1.0,g:0.0,b:0.0}];
 colorArr.push({r:0.0,g:1.0,b:0.0});
 colorArr.push({r:0.0,g:0.0,b:1.0});
+
 
 function Shape (gl,z,viewSize) {
   var _color = colorArr[index];
@@ -32,7 +37,22 @@ function Shape (gl,z,viewSize) {
   var bcolor = false;
   var color = white;
   var zHigh = 0.1;
-  var model = mat4.create()
+  var model = mat4.create();
+  var tex ;
+  if(index==3){
+    var img = new Image(); // width, height values are optional params
+    img.src = 'brick-diffuse.jpg';
+    img.onload = function (){
+      tex = createTexture(gl, img);
+      tex.bind(0);
+      tex.generateMipmap()
+      tex.minFilter = gl.LINEAR_MIPMAP_LINEAR
+      tex.magFilter = gl.LINEAR
+      //and repeat wrapping
+      tex.wrap = gl.REPEAT
+    }
+  }
+
   ball.vertices.push(xRand+position.x,yRand+position.y,z+zHigh+1);
   ball.color.push(color.r, color.g, color.b);
   for(var i=0;i<circlePoints;i++){
@@ -63,7 +83,7 @@ function Shape (gl,z,viewSize) {
   var _vertices = glBuffer(gl,new Float32Array(ball.vertices));
   var _colors = glBuffer(gl,new Float32Array(ball.color));
   var _length = ball.vertices.length/3;
-  var _shader = glShader(gl,_vertex,_frag[index-1]);
+  var _shader = glShader(gl,_vertex[index-1],_frag[index-1]);
 
 
   _shader.attributes.aPosition.location = 0;
@@ -83,10 +103,12 @@ function Shape (gl,z,viewSize) {
       _rotation += (360 * time.elapsed) * (settings.timeScale*0.000001);
       _z = _initialZ+_zIndex*Math.cos(_rotation);
       mat4.identity(model, model);
-      mat4.translate(model, model, [_z, 0, -7]);
+      mat4.translate(model, model, [_z, 0, -10]);
       //mat4.translate(model, model, [0, 0, 0]);
       //mat4.rotate(model, model, _rotation, [0, 1, 0]);
-
+      if(tex){
+        tex.bind(0);
+      }
       _shader.bind();
       _shader.uniforms.uProjection = camera.projection;
       _shader.uniforms.uModelView = model;
@@ -99,6 +121,9 @@ function Shape (gl,z,viewSize) {
       _colors.bind();
       _shader.attributes.aColor.pointer();
       gl.drawArrays(gl.TRIANGLE_FAN, 0, _length);
+      _vertices.unbind();
+      _colors.unbind();
+
     }
   };
 }
