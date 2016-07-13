@@ -21,9 +21,11 @@ module.exports = function(viewSize){
     near: 0.01,
     far: 100
   });
-  var simulatorGui = _gui.addFolder('Simulator');
-  simulatorGui.add(settings, 'cameraDistance', 0, 10).listen();
-  simulatorGui.add(settings, 'timeScale', 1, 10).listen();
+  if(!(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)){
+    var simulatorGui = _gui.addFolder('Simulator');
+    simulatorGui.add(settings, 'cameraDistance', 0, 10).listen();
+    simulatorGui.add(settings, 'timeScale', 1, 10).listen();
+  }
   return {
     init:function (gl,gameProperties) {
         this.gl = gl;

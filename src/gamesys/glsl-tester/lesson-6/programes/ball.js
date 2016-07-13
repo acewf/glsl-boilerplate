@@ -41,7 +41,7 @@ function Shape (gl,z,viewSize) {
   var tex ;
   if(index==3){
     var img = new Image(); // width, height values are optional params
-    img.src = 'brick-diffuse.jpg';
+    img.src = 'resources/wood.jpg';
     img.onload = function (){
       tex = createTexture(gl, img);
       tex.bind(0);

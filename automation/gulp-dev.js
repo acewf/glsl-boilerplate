@@ -32,7 +32,7 @@ module.exports = function (options) {
 
     // The development server (the recommended option for development)
     gulp.task("default", function (done) {
-        runSequence("build-dev-webpack", "build-dev-webpack-watch", "build-dev-webpack-server", done);
+        runSequence("build-resources","build-dev-webpack", "build-dev-webpack-watch", "build-dev-webpack-server", done);
     });
 
     gulp.task("build-dev-webpack", function (done) {

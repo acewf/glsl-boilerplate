@@ -5,12 +5,6 @@ varying float vTime;
 uniform sampler2D texNormal;
 
 void main () {
-  //vec2 p = gl_FragCoord.xy / vResolution.xy;
-  //vec2 uv = p;
-  //gl_PointCoord.xy
-  ////gl_FragCoord.xy
-  //float z = 0.5+0.5*smoothstep(-1.0, 1.0, cos(vTime * 0.0005));
-  //vec3 blendColor = vec3(p.x, p.y, z);
   vec2 mresolution = vec2(50,50);
 
   float time=vTime;
