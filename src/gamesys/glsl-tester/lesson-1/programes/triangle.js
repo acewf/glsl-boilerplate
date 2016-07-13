@@ -5,11 +5,14 @@ var _vertex = require("raw!./../shaders/triangle.vs");
 var glShader = require('gl-shader');
 function Triangle (gl) {
   var triangleVertices = [
+    // X , Y , Z
     +0.0, +1.0, +0.0,
     -1.0, -1.0, +0.0,
     +1.0, -1.0, +0.0
   ];
+  // Values XYZ on the vertices are between -1.0 and 1.0
   var triangleColors = [
+    // R , G , B
     +1.0, +0.5, +1.0,
     +0.5, +0.5, +0.0,
     +0.0, +0.0, +1.0
@@ -18,6 +21,7 @@ function Triangle (gl) {
   var _vertices = glBuffer(gl,new Float32Array(triangleVertices));
   var _colors = glBuffer(gl,new Float32Array(triangleColors));
   var _length = triangleVertices.length/3;
+  /// Compile the shaders
   var _shader = glShader(gl,_vertex,_frag);
 
   _shader.attributes.aPosition.location = 0;
@@ -28,7 +32,6 @@ function Triangle (gl) {
       // Bind the shader
      _shader.bind();
      _shader.uniforms.uProjection = projectionMatrix;
-     // Draw the triangle
      _shader.uniforms.uModelView = tMatrix;
      _vertices.bind();
      _shader.attributes.aPosition.pointer();
