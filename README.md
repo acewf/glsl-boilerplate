@@ -16,6 +16,7 @@ This project starts from the basics how to develop for WebGl
 
 1. Make sure you have node
 2. type `npm install` on your terminal
+3. type `npm install --global gulp-cli` on your terminal
 
 ## Usage
 
