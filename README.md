@@ -33,7 +33,7 @@ you `http://localhost:3000/webpack-dev-server/output/index.html`
 
 ## Credits
 
-This BoilerPlate was created by Pedro Martins <pedro.martins@gamsys.co.uk> was
+This BoilerPlate was created by Pedro Martins <pedro.martins@pixelkiller.net> was
 part of trying to push the technology use for building games on Gamesys
 
 ## License
