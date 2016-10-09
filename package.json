@@ -24,6 +24,7 @@
     "gl-vec3": "latest",
     "gl-vec4": "latest",
     "glslify-loader": "^1.0.2",
+    "merge-vertices": "^1.0.1",
     "perspective-camera": "^1.0.0",
     "pixi.js": "^3.0.7",
     "q": "^1.4.1",

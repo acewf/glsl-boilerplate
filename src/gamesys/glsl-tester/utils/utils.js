@@ -12,5 +12,20 @@ module.exports = {
       var value = Math.random()*(max-min);
       var final = min+value;
       return final;
+    },
+    loadImg:function(url,callback){
+      var img = new Image(); // width, height values are optional params
+      img.src = url;
+      img.onload = function (){
+        callback(img);
+      }
+    },
+    loadVideo:function(url,callback){
+      var video = document.createElement('video'); // width, height values are optional params
+      video.autoplay = true;
+      video.src = url;
+      video.onloadeddata = function (e){
+        callback(video);
+      }
     }
 }

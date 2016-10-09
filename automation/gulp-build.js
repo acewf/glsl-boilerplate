@@ -9,7 +9,7 @@ var sonar = require('gulp-sonar');
 var WebpackConfig = require("./webpack.config.js");
 
 module.exports = function (options) {
-    var allowedExtensions = ['json', 'png', 'wav', 'mp3', 'm4a', "atlas", "jpg"];
+    var allowedExtensions = ['json', 'png', 'wav', 'mp3', 'm4a', "mp4", "atlas", "jpg"];
     var webpackConfig = new WebpackConfig(options);
 
     // Production build
