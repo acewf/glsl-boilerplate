@@ -24,8 +24,8 @@ function Shape (gl,z,viewSize) {
   var lastPoint = vec3.create();
   var point = {};
   if(index==3){
+    /*
     utils.loadVideo('resources/video3.mp4',function(img){
-      /*
       img.loop = true;
       _video = img;
       tex = createTexture(gl, img);
@@ -36,8 +36,8 @@ function Shape (gl,z,viewSize) {
       //and repeat wrapping
       //tex.wrap = gl.REPEAT;
       _shape.ready = true;
-      */
     });
+    */
     utils.loadImg('resources/wood.jpg',function(img){
       tex = createTexture(gl, img);
       //tex.bind(0);
@@ -106,7 +106,7 @@ function Shape (gl,z,viewSize) {
       }
 
       var _time = time.lastTime-time.initTime;
-      _shader.uniforms.time = parseFloat(_time);
+      _shader.uniforms.time = parseFloat(_time/500);
       _vertices.bind();
       _shader.attributes.aPosition.pointer();
       _colors.bind();

@@ -32,5 +32,7 @@ void main() {
 
   mat4 modelView = view * uModelView;
   vCentro = uProjection * modelView * vec4(centro, 1.0);
-  gl_Position = uProjection * modelView * vec4(aPosition, 1.0);
+  vec3 npos = aPosition*3.0;
+  npos.x = npos.x*3.0;
+  gl_Position = uProjection * modelView * vec4(npos, 1.0);
 }
